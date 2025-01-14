@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -30,8 +29,6 @@ public class CropActivity extends AppCompatActivity {
     ImageView scale;
     ImageView mWand;
 
-    ImageView save;
-
     ProgressDialog progressDialog;
 
     @Override
@@ -39,12 +36,14 @@ public class CropActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
+        ImageView img = (ImageView) findViewById(R.id.img);
+
 
 
         Intent intent = getIntent();
-        String path = intent.getStringExtra("data");
+        byte[] data = intent.getByteArrayExtra("data");
 
-        File file =  new File(path);
+        //File file =  new File(path);
 
 
 
@@ -54,10 +53,9 @@ public class CropActivity extends AppCompatActivity {
 
 
         mainFRame = (RelativeLayout) findViewById(R.id.imageFrame);
-        erase = (android.widget.ImageView) findViewById(R.id.erase);
-        scale = (android.widget.ImageView) findViewById(R.id.scale);
-        mWand=  (android.widget.ImageView) findViewById(R.id.mwand);
-        save = (ImageView) findViewById(R.id.save);
+        erase = (ImageView) findViewById(R.id.erase);
+        scale = (ImageView) findViewById(R.id.scale);
+        mWand=  (ImageView) findViewById(R.id.mwand);
 
 
 
@@ -75,8 +73,14 @@ public class CropActivity extends AppCompatActivity {
         mWand.setSelected(false);
         mWand.invalidate();
 
+        Bitmap bmp = BitmapFactory.decodeByteArray(data,0,data.length);
+        img.setImageBitmap(bmp);
 
-        Bitmap bitmap = reduceSize(file , Utils.getScreenWidth(this) , 1000);
+
+
+
+
+        //Bitmap bitmap = reduceSize(file , Utils.getScreenWidth(this) , 1000);
 
 
 //        srcRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -103,12 +107,13 @@ public class CropActivity extends AppCompatActivity {
 //        Canvas canvas = new Canvas(bitmap1);
 //        canvas.drawBitmap(bitmap , 0 , 0 , null);
 
-        MyDrawingSurface md = new MyDrawingSurface(this ,file);
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(Utils.getScreenWidth(this)
-                , 600);
-        params.bottomMargin = Utils.PixeltoDp(this , 50);
-        md.setLayoutParams(params);
+        MyDrawingSurface md = (MyDrawingSurface) findViewById(R.id.mysurface);
+        md.setImage(bmp);
+//
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(Utils.getScreenWidth(this)
+//                , 600);
+//        params.bottomMargin = Utils.PixeltoDp(this , 50);
+//        md.setLayoutParams(params);
 
         erase.setOnClickListener((v) -> {
 
@@ -162,16 +167,9 @@ public class CropActivity extends AppCompatActivity {
 
         md.setMode(2);
 
-        mainFRame.addView(md);
+        //mainFRame.addView(md);
 
-        md.setMode(2);
-
-        save.setOnClickListener((v)->{
-
-            md.saveBitmapToGallery();
-
-
-        });
+        //md.setMode(2);
     }
 
     private Bitmap reduceSize(File bitmapFile , int width , int height) {

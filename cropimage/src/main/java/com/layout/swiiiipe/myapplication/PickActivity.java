@@ -1,5 +1,7 @@
 package com.layout.swiiiipe.myapplication;
 
+import static android.Manifest.permission;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,12 +24,10 @@ import androidx.core.content.FileProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static android.Manifest.*;
 
 public class PickActivity extends AppCompatActivity {
     private static final int GALLERY_CODE =200 ;
@@ -75,35 +75,41 @@ public class PickActivity extends AppCompatActivity {
                         try {
 
                             InputStream is = getContentResolver().openInputStream(uri);
-                            byte[] bytes = new byte[2048];
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                            File file1 = new File(file , "Pics");
-                            if (!file1.exists()) {
 
-                                file1.mkdir();
-                            }
+                            byte[]bytes = new byte[is.available()];
 
-                            File file2 = new File(file1 , "sample_img.png");
-                            if (!file2.exists()) {
-
-                                file2.createNewFile();
-                            }
-
-                            FileOutputStream fos = new FileOutputStream(file2);
-                            int i = 0;
-
-                            while ((i=(is.read(bytes))) !=-1) {
-
-                                baos.write(bytes , 0 , i);
+                            is.read(bytes,0,bytes.length);
 
 
-                            }
-
-                            baos.writeTo(fos);
+//                            byte[] bytes = new byte[2048];
+//                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                            File file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//                            File file1 = new File(file , "Pics");
+//                            if (!file1.exists()) {
+//
+//                                file1.mkdir();
+//                            }
+//
+//                            File file2 = new File(file1 , "sample_img.png");
+//                            if (!file2.exists()) {
+//
+//                                file2.createNewFile();
+//                            }
+//
+//                            FileOutputStream fos = new FileOutputStream(file2);
+//                            int i = 0;
+//
+//                            while ((i=(is.read(bytes))) !=-1) {
+//
+//                                baos.write(bytes , 0 , i);
+//
+//
+//                            }
+//
+//                            baos.writeTo(fos);
 
                             Intent intent = new Intent(this , CropActivity.class);
-                            intent.putExtra("data" , file2.getPath());
+                            intent.putExtra("data",bytes);
                             startActivity(intent);
 
                         } catch (Exception ex) {
