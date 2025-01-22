@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -29,6 +31,10 @@ public class CropActivity extends AppCompatActivity {
     ImageView scale;
     ImageView mWand;
 
+    ImageView rotate;
+
+    ImageView save;
+
     ProgressDialog progressDialog;
 
     @Override
@@ -36,7 +42,7 @@ public class CropActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
-        ImageView img = (ImageView) findViewById(R.id.img);
+
 
 
 
@@ -52,10 +58,13 @@ public class CropActivity extends AppCompatActivity {
 
 
 
-        mainFRame = (RelativeLayout) findViewById(R.id.imageFrame);
-        erase = (ImageView) findViewById(R.id.erase);
-        scale = (ImageView) findViewById(R.id.scale);
-        mWand=  (ImageView) findViewById(R.id.mwand);
+
+        erase = (android.widget.ImageView) findViewById(R.id.erase);
+        scale = (android.widget.ImageView) findViewById(R.id.scale);
+        mWand=  (android.widget.ImageView) findViewById(R.id.mwand);
+        rotate = (ImageView) findViewById(R.id.rotate);
+
+        save = (ImageView) findViewById(R.id.save);
 
 
 
@@ -63,6 +72,7 @@ public class CropActivity extends AppCompatActivity {
         erase.setImageTintList(colorStateList);
         scale.setImageTintList(colorStateList);
         mWand.setImageTintList(colorStateList);
+        rotate.setImageTintList(colorStateList);
 
         erase.setSelected(false);
         erase.invalidate();
@@ -73,8 +83,11 @@ public class CropActivity extends AppCompatActivity {
         mWand.setSelected(false);
         mWand.invalidate();
 
+        rotate.setSelected(false);
+        rotate.invalidate();
+
         Bitmap bmp = BitmapFactory.decodeByteArray(data,0,data.length);
-        img.setImageBitmap(bmp);
+
 
 
 
@@ -123,6 +136,9 @@ public class CropActivity extends AppCompatActivity {
             mWand.setSelected(false);
             mWand.invalidate();
 
+            rotate.setSelected(false);
+            rotate.invalidate();
+
             erase.setSelected(true);
             erase.invalidate();
 
@@ -139,6 +155,9 @@ public class CropActivity extends AppCompatActivity {
             mWand.setSelected(false);
             mWand.invalidate();
 
+            rotate.setSelected(false);
+            rotate.invalidate();
+
             scale.setSelected(true);
             scale.invalidate();
 
@@ -146,20 +165,54 @@ public class CropActivity extends AppCompatActivity {
 
         });
 
+
+
         mWand.setOnClickListener((v)->{
 
-            scale.setSelected(false);
-            scale.invalidate();
+            md.saveImageToGallery(CropActivity.this);
 
-            erase.setSelected(false);
-            erase.invalidate();
+//            scale.setSelected(false);
+//            scale.invalidate();
+//
+//            erase.setSelected(false);
+//            erase.invalidate();
+//
+//
+//
+//            mWand.setSelected(true);
+//            mWand.invalidate();
+//
+//            md.setMode(3);
+        });
 
+        rotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                erase.setSelected(false);
+                erase.invalidate();
 
-            mWand.setSelected(true);
-            mWand.invalidate();
+                mWand.setSelected(false);
+                mWand.invalidate();
 
-            md.setMode(3);
+                scale.setSelected(false);
+                scale.invalidate();
+
+                rotate.setSelected(true);
+                rotate.invalidate();
+
+                md.setMode(4);
+
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                md.saveImageToGallery(CropActivity.this);
+
+            }
         });
 
         scale.setSelected(true);
