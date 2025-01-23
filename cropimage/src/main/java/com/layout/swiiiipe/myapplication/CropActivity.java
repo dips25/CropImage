@@ -169,7 +169,7 @@ public class CropActivity extends AppCompatActivity {
 
         mWand.setOnClickListener((v)->{
 
-            md.saveImageToGallery(CropActivity.this);
+            //md.saveImageToGallery(CropActivity.this);
 
 //            scale.setSelected(false);
 //            scale.invalidate();

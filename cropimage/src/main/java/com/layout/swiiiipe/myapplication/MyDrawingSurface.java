@@ -843,6 +843,8 @@ public class MyDrawingSurface extends SurfaceView {
                         float angle = calculateDistanceAndAngle(centerX,centerY,dX,dy);
 
                         myDrawingThread.matrix.preRotate(angle,centerX,centerY);
+                        inverseMatrix.preRotate(angle,centerX,centerY);
+                        myDrawingThread.matrix.invert(inverseMatrix);
 
                         myDrawingThread.matrix.getValues(mMatrixValues);
                         //inverseMatrix.mapPoints(mMatrixValues);
